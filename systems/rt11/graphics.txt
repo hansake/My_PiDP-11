@@ -1,0 +1,35 @@
+sim> help set vt
+
+VT device SET commands:
+
+set VT CRT={VR14|VR17|VR48}   	CRT Type
+set VT WIN=FULL|NORM          	WIN Type
+set VT SCALE={1|2|4|8}        	Pixel Scale Factor
+set VT HSPACE={NARROW|NORMAL} 	Horizontal Spacing
+set VT VSPACE={TALL|NORMAL}   	Vertical Spacing
+set VT ADDRESS=val            	Bus address
+set VT VECTOR=val             	Interrupt vector
+set VT AUTOCONFIGURE          	Enable autoconfiguration of address & vector
+set VT ENABLE                 	Enables device VT
+set VT DISABLE                	Disables device VT
+set VT DEBUG                  	Enables debugging for device VT
+set VT NODEBUG                	Disables debugging for device VT
+set VT DEBUG=OPS;RRD;RWR;INT;STOP;LPEN;CHAR;NAME;VT11;TRACE;VMOU;VKEY;VCUR;VVID
+                              	Enables specific debugging for device VT
+set VT NODEBUG=OPS;RRD;RWR;INT;STOP;LPEN;CHAR;NAME;VT11;TRACE;VMOU;VKEY;VCUR;VVID
+                              	Disables specific debugging for device VT
+
+
+1. Window sizes with scale=1: VR14 1024x768, VR17 1024x1024, VR48 1024x1024
+2. Win mode. FULL = use whole screen with no borders eg a 1024x768 monitor is perfect for a VR14. NORM = a normal window with a title and border.
+3. Scale mode. These are division factors. ie with scale-2 and CRT=VR17 the window will be 512x512. Scale 4 and 8 are not very useful. (Then you can have a terminal on screen as well).
+4. I hope the others are fairly obvious.
+5. As we are using SDL2, the window is always on display :0 (the Pi). But, you can have a remote display with RealVNC ... not bad either!
+6. The VS60 mode is selected with:
+set vt crt=vr48
+set vt scale=1
+set vs60 enable
+set vs60 vector=320
+This can be used with RT11/Lunar lander as well but, I haven't managed to find any VS60 specific software as yet.
+Try it, the phosphor setting is quite pretty!
+5. I have a build of the Fortran graphic libraries for RT11 and RSX11. If anyone want a copy, let me know. (See http://bitsavers.trailing-edge.com/pdf/dec/graphics/VT11/FtnGfxPkg_FortranRef.pdf) (This was really hard, ODT and everything!)
