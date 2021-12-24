@@ -1,5 +1,5 @@
 The following disk image files are compressed
-and needs to be unźipped befire the are loade in the simulator.
+and needs to be unźipped before the are loaded in the simulator.
 * 211bsd/2.11BSD_rq.dsk.zip
 * sysiii/disk.hp.zip
 * unix7/disk0.hp.zip
