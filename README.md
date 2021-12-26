@@ -2,6 +2,8 @@
 
 ![PiDP-11 running RSX-11M Plus](photos/pidp11.gif?raw=true)
 
+Oscar Vermeulen provided the front panel hardware kit.
+
 The description of the PiDP-11 kit:
 * [PiDP-11 | obsolescence](https://obsolescence.wixsite.com/obsolescence/pidp-11)
 
