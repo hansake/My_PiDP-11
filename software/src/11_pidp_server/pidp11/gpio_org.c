@@ -364,7 +364,6 @@ unsigned bcm_host_get_peripheral_address(void) // find Pi's gpio base address
    return address == ~0 ? 0x20000000 : address;
 
 }
-
 static unsigned get_dt_ranges(const char *filename, unsigned offset)
 {
 	unsigned address = ~0;
@@ -379,60 +378,68 @@ static unsigned get_dt_ranges(const char *filename, unsigned offset)
 	return address;
 }
 
-/*  Update by Neal G.
-    https://groups.google.com/g/pidp-11/c/xqBhnLktDsk/m/KQp4Yjc1BwAJ
-    indicators were going "backwards" in original code.
- */
+
+
 void check_rotary_encoders(int switchscan)
 {
-        // 2 rotary encoders. Each has two switch pins. Normally, both are 0 - no rotation.
-        // encoder 1: row1, bits 8,9. Encoder 2: row1, bits 10,11
-        // Gray encoding: rotate up sequence   = 11 -> 01 -> 00 -> 10 -> 11
-        // Gray encoding: rotate down sequence = 11 -> 10 -> 00 -> 01 -> 11
+	// 2 rotary encoders. Each has two switch pins. Normally, both are 0 - no rotation.
+	// encoder 1: row1, bits 8,9. Encoder 2: row1, bits 10,11
+	// Gray encoding: rotate up sequence   = 11 -> 01 -> 00 -> 10 -> 11
+	// Gray encoding: rotate down sequence = 11 -> 10 -> 00 -> 01 -> 11
 
-        static int  lastCode[2] = {3,3};
-        static int  isMoving[2] = {0,0};
-        int code[2];
-        int i;
+	static int lastCode[2] = {3,3};
+	int code[2];
+	int i;
+
+	code[0] = (switchscan & 0x300) >> 8;
+	code[1] = (switchscan & 0xC00) >> 10;
+	switchscan = switchscan & 0xff;	// set the 4 bits to zero
+
+//printf("code 0 = %d, code 1 = %d\n", code[0], code[1]);
+
+	// detect rotation
+	for (i=0;i<2;i++)
+	{
+		if ((code[i]==1) && (lastCode[i]==3))
+			lastCode[i]=code[i];
+		else if ((code[i]==2) && (lastCode[i]==3))
+			lastCode[i]=code[i];
+	}
+
+	// detect end of rotation
+	for (i=0;i<2;i++)
+	{
+		if ((code[i]==3) && (lastCode[i]==1))
+		{
+			lastCode[i]=code[i];
+			switchscan = switchscan + (1<<((i*2)+8));
+//			printf("%d end of UP %d %d\n",i, switchscan, (1<<((i*2)+8)));
+			knobValue[i]++;	//bugfix 20181225
+
+		}
+		else if ((code[i]==3) && (lastCode[i]==2))
+		{
+			lastCode[i]=code[i];
+			switchscan = switchscan + (2<<((i*2)+8));
+//			printf("%d end of DOWN %d %d\n",i,switchscan, (2<<((i*2)+8)));
+			knobValue[i]--;	// bugfix 20181225
+		}
+	}
 
 
-        code[0] = (switchscan & 0x300) >> 8;
-        code[1] = (switchscan & 0xC00) >> 10;
+//	if (knobValue[0]>7)
+//		knobValue[0] = 0;
+//	if (knobValue[1]>3)
+//		knobValue[1] = 0;
+//	if (knobValue[0]<0)
+//		knobValue[0] = 7;
+//	if (knobValue[1]<0)
+//		knobValue[1] = 3;
 
-        for (i=0;i<2;i++)
-        {
+	knobValue[0] = knobValue[0] & 7;
+	knobValue[1] = knobValue[1] & 3;
 
-           if (lastCode[i] != code[i])
-           {
-              switch(isMoving[i])
-              {
-                 case 0: // not currently moving
-                 {
-                    if ((code[i] == 1) && (lastCode[i] == 3)) isMoving[i] =  1;
-                    if ((code[i] == 2) && (lastCode[i] == 3)) isMoving[i] = -1;
-                    break;
-                 };
-                 case 1: // up movement in progress
-                 {
+	// end result: bits 8,9 are 00 normally, 01 if UP, 10 if DOWN. Same for bits 10,11 (knob 2)
+	// these bits are not used, actually. Status is communicated through global variable knobValue[i]
 
-                    if ((code[i] == 0) && (lastCode[i] == 1)) --knobValue[i];
-                    isMoving[i] = 0;
-                    break;
-                 };
-                 case -1: // down movement in progress
-                 {
-                    if ((code[i] == 0) && (lastCode[i] == 2)) ++knobValue[i];
-                    isMoving[i] = 0;
-                    break;
-                 };
-              }
-
-              lastCode[i]=code[i];
-
-           }
-        }
-
-        knobValue[0] = knobValue[0] & 7;
-        knobValue[1] = knobValue[1] & 3;
 }
-
