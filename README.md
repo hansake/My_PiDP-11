@@ -13,5 +13,7 @@ The build instruction:
 Screenshot running 2.11 BSD
 
 <div style="width: 60%; height: 60%">
+  
 ![2.11 BSD](photos/PiDP-11_2.11_BSD_2022-01-10.png?raw=true)
+  
 </div>
