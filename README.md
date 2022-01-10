@@ -9,3 +9,7 @@ The description of the PiDP-11 kit:
 
 The build instruction:
 * [PiDP-11 Building Instructions | obsolescence](https://obsolescence.wixsite.com/obsolescence/pidp-11-building-instructions)
+
+Screenshot running 2.11 BSD
+
+[2.11 BSD](photos/PiDP-11_2.11_BSD_2022-01-10.png?raw=true)
