@@ -12,4 +12,4 @@ The build instruction:
 
 Screenshot running 2.11 BSD
   
-![2.11 BSD](photos/PiDP-11_2.11_BSD_2022-01-10.png?raw=true)
+![2.11 BSD](photos/PiDP-11_2.11_BSD_small_2022-01-10.png?raw=true)
