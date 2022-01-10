@@ -1,6 +1,6 @@
 # My PiDP-11 build project.
 
-![PiDP-11 running RSX-11M Plus](photos/pidp11.gif?raw=true)
+![PiDP-11](photos/pidp11.gif?raw=true)
 
 Oscar Vermeulen provided the front panel hardware kit.
 
